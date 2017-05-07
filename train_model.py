@@ -15,8 +15,8 @@ for i in range(EPOCHS):
     for i in range(1,hm_data+1):
         train_data = np.load('training_data.npy')
 
-        train = train_data[:-100]
-        test = train_data[-100:]
+        train = train_data[:-500]
+        test = train_data[-500:]
 
         X = np.array([i[0] for i in train]).reshape(-1,WIDTH,HEIGHT,1)
         Y = [i[1] for i in train]

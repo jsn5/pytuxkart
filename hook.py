@@ -1,14 +1,10 @@
-import pyautogui
-from numba import jit
 import numpy as np
 import time
 import os
-import curses
 from PIL import Image
 import pyxhook
 from resizeimage import resizeimage
-
-
+from mss import mss
 
 #instantiate HookManager class
 new_hook=pyxhook.HookManager()
@@ -22,24 +18,30 @@ count = 0
 #this function is called everytime a key is pressed.
 def OnKeyPress(event):
 	key = event.Ascii
-	paused = False
-	# 800x600 windowed mode
-	screen = pyautogui.screenshot(region=(65,50, 1020, 720))
-	last_time = time.time()
+	saveData(key)
+
+
+def getImage():
+	with mss() as sct:
+		# The screen part to capture
+		mon = {'top': 65, 'left': 50, 'width': 1020, 'height': 720}
+		sct.get_pixels(mon)
+		img = Image.frombytes('RGB', (sct.width, sct.height), sct.image)
+	return img
+
+def saveData(key):
+	last_time=time.time()
+	#screen = pyautogui.screenshot(region=(65,50, 1020, 720))
+	screen = getImage()
 	screen = screen.convert('L')
 	screen = resizeimage.resize_cover(screen, [160, 120], validate=False)
 	screen = np.array(screen)
-	# resize to something a bit more acceptable for a CNN
-	if key != 97 and key != 100:
-		global count
-		print("step "+str(count))
-		count+=1
-		output = keys_to_output(key)
-		print(output)
-		training_data.append([screen,output])
-	
-	
+	output = keys_to_output(key)
+	print(output)
+	training_data.append([screen,output])
+	print("time="+str(time.time()-last_time))
 	if len(training_data) % 100 == 0:
+		print("length of data:")
 		print(len(training_data))
 		np.save(file_name,training_data)
 
@@ -50,7 +52,6 @@ new_hook.HookKeyboard()
 #start the session
 new_hook.start()
 	
-
 
 
 
