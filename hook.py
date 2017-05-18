@@ -5,6 +5,7 @@ from PIL import Image
 import pyxhook
 from resizeimage import resizeimage
 from mss import mss
+import os
 
 #instantiate HookManager class
 new_hook=pyxhook.HookManager()
@@ -15,10 +16,12 @@ for i in list(range(4))[::-1]:
 		time.sleep(1)
 
 count = 0
+current_key = 0
 #this function is called everytime a key is pressed.
 def OnKeyPress(event):
-	key = event.Ascii
-	saveData(key)
+	global current_key
+	current_key = event.Ascii
+	#saveData(key)
 
 
 def getImage():
@@ -33,6 +36,7 @@ def saveData(key):
 	last_time=time.time()
 	#screen = pyautogui.screenshot(region=(65,50, 1020, 720))
 	screen = getImage()
+	#screen.save("test.png")
 	screen = screen.convert('L')
 	screen = resizeimage.resize_cover(screen, [160, 120], validate=False)
 	screen = np.array(screen)
@@ -40,7 +44,7 @@ def saveData(key):
 	print(output)
 	training_data.append([screen,output])
 	print("time="+str(time.time()-last_time))
-	if len(training_data) % 100 == 0:
+	if len(training_data) % 1000 == 0:
 		print("length of data:")
 		print(len(training_data))
 		np.save(file_name,training_data)
@@ -66,7 +70,7 @@ def keys_to_output(keys):
 	return output
 
 
-file_name = 'training_data.npy'
+file_name = 'data/training_data.npy'
 
 if os.path.isfile(file_name):
 	print('File exists, loading previous data!')
@@ -75,4 +79,29 @@ else:
 	print('File does not exist, starting fresh!')
 	training_data = []
 
+def main():
 
+	global current_key
+	paused = False;
+	while True:
+		if paused == True:
+			if current_key == 112:
+				paused = False
+				time.sleep(1)
+				print("resumed")
+				current_key = 0
+		else:
+			if current_key == 112:
+				paused = True
+				time.sleep(1)
+				print("paused")
+				current_key = 0
+			else:
+				saveData(current_key)
+			
+
+
+
+
+
+main()
