@@ -1,8 +1,8 @@
-## PyTuxCart 
+## PyTuxKart 
 
-This is an attempt to make a self driving ai that plays SuperTuxCart. 
+This is an attempt to make a self driving ai that plays SuperTuxKart. 
 
-![Screenshot](https://github.com/jsn5/pytuxcart/blob/master/gameai.gif "17/MAY/2017")
+![Screenshot](https://github.com/jsn5/pytuxkart/blob/master/gameai.gif "17/MAY/2017")
 
 ## Credits
 
