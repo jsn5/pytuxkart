@@ -6,4 +6,4 @@ This is an attempt to make a self driving ai that plays SuperTuxKart.
 
 ## Credits
 
-This was made mostly based on [pygta5](https://github.com/Sentdex/pygta5/) by [sentdex](https://github.com/Sentdex/)
+[pygta5](https://github.com/Sentdex/pygta5/) by [sentdex](https://github.com/Sentdex/)
